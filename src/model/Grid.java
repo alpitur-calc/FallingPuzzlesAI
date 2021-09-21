@@ -42,7 +42,7 @@ public class Grid {
             Tile tile= new Tile(type, x, y);
             //System.out.println("Tile :"+ tile.getType()+ " "+ tile.getX() +" " +tile.getY());
             if( (y + tile.getType())-1 < 8 && (tile.getType()+lenght) <= maxLenght ){
-                if(!this.overlap(tile)){
+                if(!this.overlap(tile.getType(), tile.getX(), tile.getY())){
                     lenght+= tile.getType();
                     //ntiles+= 1;
                     this.tiles.add(tile);
@@ -52,10 +52,11 @@ public class Grid {
         }
     }
 
-    private boolean overlap(Tile t){
+    private boolean overlap(int type, int x, int y){
         boolean does = false;
-        for(int k = t.getY(); k < t.getY()+t.getType(); k++){
-            if(matrix[t.getX()][k] != 0){ does = true; }
+        if(x>=10){ return does; }
+        for(int k = y; k < y+type; k++){
+            if(matrix[x][k] != 0){ does = true; }
         }
 
         return does;
@@ -66,6 +67,18 @@ public class Grid {
             t.setX(t.getX()-1);
         }
         this.updateGrid();
+        //this.fall();
+    }
+
+    public void fall(){
+        for(int i = this.tiles.size()-1; i>=0; i--){
+            Tile t = tiles.get(i);
+            boolean overlap = false;
+            while((t.getX()+1) < 10 & !overlap(t.getType(), t.getX()+1, t.getY())){
+                t.setX(t.getX()+1);
+            }
+            updateGrid();
+        }
     }
 
     public void updateGrid(){

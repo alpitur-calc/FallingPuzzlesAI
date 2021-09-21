@@ -26,7 +26,9 @@ public class MovementController implements KeyListener {
         }
         if(e.getKeyCode() == KeyEvent.VK_P){
             Game.getInstance(this.gp).printMatrix();
-
+        }
+        if(e.getKeyCode() == KeyEvent.VK_F){
+            Game.getInstance(this.gp).fall();
         }
     }
 
