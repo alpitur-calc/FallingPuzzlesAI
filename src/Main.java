@@ -1,3 +1,4 @@
+import controller.MouseController;
 import controller.MovementController;
 import model.Grid;
 import view.GraphicPanel;
@@ -15,6 +16,7 @@ public class Main {
 
         GraphicPanel gp = new GraphicPanel(new Grid());
         gp.addKeyListener(new MovementController(gp));
+        gp.addMouseListener(new MouseController(gp));
         gp.setFocusable(true);
 
         f.add(gp);

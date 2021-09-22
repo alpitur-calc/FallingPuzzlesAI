@@ -21,19 +21,26 @@ public class MovementController implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_A){
+        if(e.getKeyCode() == KeyEvent.VK_R){
             Game.getInstance(this.gp).addRow();
         }
         if(e.getKeyCode() == KeyEvent.VK_P){
             Game.getInstance(this.gp).printMatrix();
         }
-        if(e.getKeyCode() == KeyEvent.VK_F){
-            Game.getInstance(this.gp).fall();
-        }
+
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        if(e.getKeyCode() == KeyEvent.VK_LEFT){
+            Game.getInstance(this.gp).getGraphicPanel().getGrid().move(false);
+        }
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+            Game.getInstance(this.gp).getGraphicPanel().getGrid().move(true);
+        }
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            Game.getInstance(this.gp).fall();
+        }
     }
 }

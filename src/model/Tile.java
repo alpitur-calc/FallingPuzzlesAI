@@ -5,6 +5,7 @@ public class Tile {
     public static final Integer TYPE_1= 1, TYPE_2= 2, TYPE_3= 3, TYPE_SPECIAL= 5;
     private Integer type= null;
     private Integer x, y;
+    private boolean highlighted = false;
 
     public Tile(Integer type, Integer x, Integer y){
         this.type = type;
@@ -30,5 +31,13 @@ public class Tile {
 
     public void setY(Integer y) {
         this.y = y;
+    }
+
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
     }
 }

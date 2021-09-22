@@ -20,6 +20,8 @@ public class Game {
         this.gp.getGrid().generateRow();
     }
 
+    public GraphicPanel getGraphicPanel(){ return gp; }
+
     public void printMatrix(){
         this.gp.getGrid().printMatrix();
     }

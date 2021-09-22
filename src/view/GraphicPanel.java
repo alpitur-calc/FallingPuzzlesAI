@@ -31,13 +31,18 @@ public class GraphicPanel extends JPanel {
             switch(t.getType()){
                 case(1): g.setColor(Color.RED); break;
                 case(2): g.setColor(Color.GREEN); break;
-                case(3): g.setColor(Color.YELLOW); break;
-                case(4): g.setColor(Color.BLUE); break;
+                case(3): g.setColor(Color.BLUE); break;
                 default: g.setColor(Color.WHITE);
             }
             g.fillRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
-            g.setColor(Color.BLACK);
-            g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+            if(t.isHighlighted()){
+                g.setColor(Color.YELLOW);
+                g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+            }
+            else {
+                g.setColor(Color.BLACK);
+                g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+            }
         }
     }
 

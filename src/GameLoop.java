@@ -2,7 +2,7 @@ import view.GraphicPanel;
 
 public class GameLoop implements Runnable{
 
-    private int frequency = 60; // 60 FPS
+    private int frequency = 2; // 60 FPS
     private GraphicPanel gp = null;
 
     public GameLoop(GraphicPanel gp){
