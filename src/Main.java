@@ -1,32 +1,15 @@
-import controller.MouseController;
-import controller.MovementController;
 import model.Grid;
 import view.GraphicPanel;
 
-import javax.swing.*;
 
 public class Main {
 
-    private static final int WIDTH= 425, HEIGHT= 550;
-
     public static void main(String[] args) {
-        JFrame f = new JFrame();
-        f.setTitle("Falling Puzzles AI");
-        f.setSize(Main.WIDTH, Main.HEIGHT);
-
-        GraphicPanel gp = new GraphicPanel(new Grid());
-        gp.addKeyListener(new MovementController(gp));
-        gp.addMouseListener(new MouseController(gp));
-        gp.setFocusable(true);
-
-        f.add(gp);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
+        GraphicPanel gp = new GraphicPanel(new Grid());;
 
         GameLoop gameLoop = new GameLoop(gp);
+        gameLoop.main();
         Thread t = new Thread(gameLoop);
         t.start();
-
     }
-
 }

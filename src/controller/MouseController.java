@@ -18,7 +18,7 @@ public class MouseController implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = (e.getY() / 50) % 10;
         int y = (e.getX() / 50) % 10;
-        Game.getInstance(this.gp).getGraphicPanel().getGrid().setSelectedTile(x, y);
+        Game.getInstance().selectTile(x, y);
     }
 
     @Override

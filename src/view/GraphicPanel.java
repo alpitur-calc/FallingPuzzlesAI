@@ -1,5 +1,6 @@
 package view;
 
+import model.Game;
 import model.Grid;
 import model.Tile;
 
@@ -18,6 +19,7 @@ public class GraphicPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.invalidate();
 
         g.setColor(Color.BLACK);
         for(int i = 0; i< this.grid.WIDTH; i++){
@@ -34,6 +36,7 @@ public class GraphicPanel extends JPanel {
                 case(3): g.setColor(Color.BLUE); break;
                 default: g.setColor(Color.WHITE);
             }
+            if(t.isSpecial()){ g.setColor(Color.MAGENTA); }
             g.fillRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
             if(t.isHighlighted()){
                 g.setColor(Color.YELLOW);
@@ -44,14 +47,27 @@ public class GraphicPanel extends JPanel {
                 g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
             }
         }
+
+        g.setColor(Color.BLACK);
+        g.drawString("Points"+ Game.getInstance().getPoints(), 180,510 );
     }
 
     public void update() {
-        this.grid.updateGrid();
+        //this.grid.updateGrid();
         repaint();
+    }
+
+    public void sleep(int millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Grid getGrid() {
         return grid;
     }
+
+    public void resetGrid(){ this.grid= new Grid(); }
 }
