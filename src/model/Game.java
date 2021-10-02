@@ -40,9 +40,23 @@ public class Game {
         gravity();
     }
 
-    public void activateGravity(){
+    /*public void activateGravity(){
         gravity();
         newRow();
+    }*/
+
+    public void doMove(Move move){
+        if(move.getMove() > 0){ // dx
+            for(int k = 0; k < move.getMove(); k++){
+                this.gp.getGrid().move(true);
+            }
+        }
+        else if(move.getMove() < 0){
+            for(int k = 0; k > move.getMove(); k--){
+                this.gp.getGrid().move(false);
+            }
+        }
+        gravity();
     }
 
     public void move(boolean dir){

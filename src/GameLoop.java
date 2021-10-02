@@ -7,6 +7,8 @@ import it.unical.mat.embasp.languages.IllegalAnnotationException;
 import it.unical.mat.embasp.languages.ObjectNotValidException;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 import it.unical.mat.embasp.languages.asp.ASPMapper;
+import it.unical.mat.embasp.languages.asp.AnswerSet;
+import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv2.desktop.DLV2DesktopService;
 import model.*;
@@ -22,7 +24,7 @@ public class GameLoop implements Runnable{
     private int frequency = 1000; // 60 FPS
     private GraphicPanel gp = null;
 
-    private static String encodingResource="encodings/logica";
+    private static String encodingResource="encodings/logica.txt";
     private Handler handler;
     private InputProgram encoding;
 
@@ -34,11 +36,13 @@ public class GameLoop implements Runnable{
         handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
         try {
             ASPMapper.getInstance().registerClass(Move.class);
+            ASPMapper.getInstance().registerClass(TileWrapper.class);
         } catch (ObjectNotValidException | IllegalAnnotationException e1) {
             e1.printStackTrace();
         }
         encoding = new ASPInputProgram();
         encoding.addFilesPath(encodingResource);
+        handler.addProgram(encoding);
 
         JFrame f = new JFrame();
         f.setTitle("Falling Puzzles AI");
@@ -57,21 +61,31 @@ public class GameLoop implements Runnable{
     private void addFacts(){
         InputProgram facts= new ASPInputProgram();
 
+        // Passo tutte le moves possibili come fatti
         for(Move v: this.gp.getGrid().getAllPassibleMove()){
             try{
+                System.out.println(v);
                 facts.addObjectInput(v);//new TileWrapper(t.getX(), t.getY(), t.getType()));
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
 
-        /*for(Tile t: this.gp.getGrid().getEmptyTiles()){
+        for(Tile t: this.gp.getGrid().getTiles()){
             try{
                 facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
             }catch(Exception e){
                 e.printStackTrace();
             }
-        }*/
+        }
+
+        for(Tile t: this.gp.getGrid().getEmptyTiles()){
+            try{
+                facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
         handler.addProgram(facts);
     }
 
@@ -80,11 +94,21 @@ public class GameLoop implements Runnable{
         Game.getInstance().setGp(gp);
         while(true) {
             Game.getInstance().newRow();
-            //addFacts();
-            //handler.addProgram(encoding);
-            //Output o =  handler.startSync();
-            //AnswerSets answersets = (AnswerSets) o;
-            //Buh trova la cella modificata e muovi
+            addFacts();
+            Output o =  handler.startSync();
+            AnswerSets answersets = (AnswerSets) o;
+            for(AnswerSet AS: answersets.getAnswersets()){
+                try {
+                    for (Object obj : AS.getAtoms()) {
+                        if(!(obj instanceof Move)) continue;
+
+                        Move m = (Move) obj;
+                        Game.getInstance().doMove(m);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
 
             if(Game.getInstance().isDead()){Game.getInstance().reset();}
             try {

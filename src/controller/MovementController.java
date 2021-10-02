@@ -36,7 +36,7 @@ public class MovementController implements KeyListener {
             Game.getInstance().move(true);
         }
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            Game.getInstance().activateGravity();
+            //Game.getInstance().activateGravity();
         }
     }
 }

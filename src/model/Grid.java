@@ -270,8 +270,8 @@ public class Grid {
 
             //controllo a dx
             int dx=0;
-            for(int k = t.getX() - 1; k > 1; k--){
-                if(matrix[t.getY()][k] == 0){
+            for(int k = t.getY() - 1; k > 1; k--){
+                if(matrix[t.getX()][k] == 0){
                     dx--;
                     moves.add(new Move(t.getX(),t.getY(),t.getType(), dx));
                 }

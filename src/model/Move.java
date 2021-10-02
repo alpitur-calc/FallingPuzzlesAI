@@ -15,6 +15,9 @@ public class Move {
     @Param(3)
     private int move;
 
+    public Move() {
+    }
+
     public Move(int x, int y, int lenght, int move) {
         this.x = x;
         this.y = y;
