@@ -57,7 +57,7 @@ public class Grid {
         while(lenght < maxLenght){// && ntiles < 4){
             int type= r.nextInt(3)+1, x= 9, y= r.nextInt(8);
             boolean special = false;
-            // if(r.nextInt(100) % 10 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
+            //if(r.nextInt(100) % 15 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
             Tile tile= new Tile(type, x, y, special);
 
             if( (y + tile.getType())-1 < 8 && (tile.getType()+lenght) <= maxLenght){
@@ -242,6 +242,44 @@ public class Grid {
 
     public Vector<Tile> getTiles(){
         return this.tiles;
+    }
+
+    public Vector<Tile> getEmptyTiles(){
+        Vector<Tile> v = new Vector<Tile>();
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++){
+                if( matrix[i][j] == 0){ v.add(new Tile(0, i, j, false)); }
+            }
+        }
+        return v;
+    }
+
+    public Vector<Move> getAllPassibleMove(){
+        Vector<Move> moves = new Vector<Move>();
+        for(Tile t : tiles){
+
+            //controllo a sx
+            int sx = 0;
+            for(int k = (t.getY() + t.getType()) ; k < WIDTH-1; k++){
+                if(matrix[t.getX()][k] == 0){
+                    sx++;
+                    moves.add(new Move(t.getX(), t.getY(), t.getType(), sx));
+                }
+                else{ break; }
+            }
+
+            //controllo a dx
+            int dx=0;
+            for(int k = t.getX() - 1; k > 1; k--){
+                if(matrix[t.getY()][k] == 0){
+                    dx--;
+                    moves.add(new Move(t.getX(),t.getY(),t.getType(), dx));
+                }
+            }
+
+        }
+
+        return moves;
     }
 
     public void printMatrix(){

@@ -7,7 +7,7 @@ public class Game {
     private static Game instance = null;
     private GraphicPanel gp = null;
     private int points = 0;
-    private int pauses = 600;
+    private int pauses = 300;
 
     private Game(){}
 

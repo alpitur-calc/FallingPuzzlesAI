@@ -1,25 +1,24 @@
 package model;
+
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("tile")
-public class TileWrapper {
+@Id("move")
+public class Move {
 
     @Param(0)
     private int x;
     @Param(1)
     private int y;
     @Param(2)
-    private int type;
+    private int lenght;
     @Param(3)
     private int move;
 
-    public TileWrapper(){}
-
-    public TileWrapper(int x, int y, int type, int move) {
+    public Move(int x, int y, int lenght, int move) {
         this.x = x;
         this.y = y;
-        this.type = type;
+        this.lenght = lenght;
         this.move = move;
     }
 
@@ -39,12 +38,12 @@ public class TileWrapper {
         this.y = y;
     }
 
-    public int getType() {
-        return type;
+    public int getLenght() {
+        return lenght;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setLenght(int lenght) {
+        this.lenght = lenght;
     }
 
     public int getMove() {

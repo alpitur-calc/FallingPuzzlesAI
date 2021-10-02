@@ -9,10 +9,7 @@ import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 import it.unical.mat.embasp.languages.asp.ASPMapper;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv2.desktop.DLV2DesktopService;
-import model.Game;
-import model.Grid;
-import model.Tile;
-import model.TileWrapper;
+import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
@@ -34,16 +31,14 @@ public class GameLoop implements Runnable{
     }
 
     public void main(){
-
         handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
         try {
-            ASPMapper.getInstance().registerClass(TileWrapper.class);
+            ASPMapper.getInstance().registerClass(Move.class);
         } catch (ObjectNotValidException | IllegalAnnotationException e1) {
             e1.printStackTrace();
         }
         encoding = new ASPInputProgram();
         encoding.addFilesPath(encodingResource);
-
 
         JFrame f = new JFrame();
         f.setTitle("Falling Puzzles AI");
@@ -62,13 +57,21 @@ public class GameLoop implements Runnable{
     private void addFacts(){
         InputProgram facts= new ASPInputProgram();
 
-        for(Tile t: this.gp.getGrid().getTiles()){
+        for(Move v: this.gp.getGrid().getAllPassibleMove()){
+            try{
+                facts.addObjectInput(v);//new TileWrapper(t.getX(), t.getY(), t.getType()));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        /*for(Tile t: this.gp.getGrid().getEmptyTiles()){
             try{
                 facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
             }catch(Exception e){
                 e.printStackTrace();
             }
-        }
+        }*/
         handler.addProgram(facts);
     }
 
