@@ -271,7 +271,7 @@ public class Grid {
 
             //controllo a dx
             int sx=0;
-            for(int j = t.getY() - 1; j > 0; j--){
+            for(int j = t.getY() - 1; j >= 0; j--){
                 if(matrix[t.getX()][j] == 0){
                     sx++;
                     moves.add(new Move(t.getX(),t.getY(),t.getType(), 0, sx));
