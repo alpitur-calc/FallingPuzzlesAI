@@ -52,7 +52,7 @@ public class Game {
             }
         }
         else if(doMove.getMoveSx() < 0){ // sx
-            for(int k = 0; k > doMove.getMoveSx(); k--){
+            for(int k = 0; k < doMove.getMoveSx(); k++){
                 this.gp.getGrid().move(doMove.getX(), doMove.getY(), false);
             }
         }
