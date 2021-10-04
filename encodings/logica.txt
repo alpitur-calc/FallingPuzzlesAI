@@ -1,4 +1,4 @@
-row(8..9).
+row(0..9).
 col(0..7).
 distance(-5..5).
 
@@ -12,7 +12,8 @@ freeSpaceFT(FROM, TO, X) :- freeSpace(X,FROM), freeSpace(X,FROM+1), TO = FROM + 
 freeSpaceFT(FROM, TO+1, X) :- freeSpaceFT(FROM, TO, X), freeSpace(X,TO+1). % se cè uno spazio vuoto da X a Y e uno da Y+1 a Z allora ci sarà uno spazio vuoto da X a Z
 
 %move(X,Y,T,D):- tile(X,Y,T), freeSpaceFT(FROM,TO,X+1), TO-FROM <= T, D=FROM-Y.
-doMove(X,Y,T,D):- move(X,Y,T,D), freeSpaceFT(FROM,TO,X+1), TO-FROM <= T, D=FROM-Y.
+%      6 3 2 -2        6 3 2 -2              1    3   7     3            2      -2
+doMove(X,Y,T,D):- move(X,Y,T,D), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, D=FROM-Y.
 %se cè uno spazio vuoto nella riga di sotto spostati per occuparlo
 
 
