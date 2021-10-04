@@ -45,22 +45,22 @@ public class Game {
         newRow();
     }*/
 
-    public void doMove(Move move){
-        if(move.getMove() > 0){ // dx
-            for(int k = 0; k < move.getMove(); k++){
-                this.gp.getGrid().move(true);
+    public void doMove(DoMove doMove){
+        if(doMove.getMove() > 0){ // dx
+            for(int k = 0; k < doMove.getMove(); k++){
+                this.gp.getGrid().move(doMove.getX(), doMove.getY(), true);
             }
         }
-        else if(move.getMove() < 0){
-            for(int k = 0; k > move.getMove(); k--){
-                this.gp.getGrid().move(false);
+        else if(doMove.getMove() < 0){ // sx
+            for(int k = 0; k > doMove.getMove(); k--){
+                this.gp.getGrid().move(doMove.getX(), doMove.getY(), false);
             }
         }
         gravity();
     }
 
-    public void move(boolean dir){
-        this.gp.getGrid().move(dir);
+    public void move(int x, int y, boolean dir){
+        this.gp.getGrid().move(x, y, dir);
     }
 
     public void printMatrix(){

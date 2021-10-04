@@ -30,10 +30,10 @@ public class MovementController implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_LEFT){
-            Game.getInstance().move(false);
+            //Game.getInstance().move(false);
         }
         if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-            Game.getInstance().move(true);
+            //Game.getInstance().move(true);
         }
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
             //Game.getInstance().activateGravity();

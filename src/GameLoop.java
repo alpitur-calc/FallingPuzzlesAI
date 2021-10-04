@@ -21,7 +21,7 @@ public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
-    private int frequency = 1000; // 60 FPS
+    private int frequency = 3000; // 60 FPS
     private GraphicPanel gp = null;
 
     private static String encodingResource="encodings/logica.txt";
@@ -37,12 +37,12 @@ public class GameLoop implements Runnable{
         try {
             ASPMapper.getInstance().registerClass(Move.class);
             ASPMapper.getInstance().registerClass(TileWrapper.class);
+            ASPMapper.getInstance().registerClass(DoMove.class);
         } catch (ObjectNotValidException | IllegalAnnotationException e1) {
             e1.printStackTrace();
         }
         encoding = new ASPInputProgram();
         encoding.addFilesPath(encodingResource);
-        handler.addProgram(encoding);
 
         JFrame f = new JFrame();
         f.setTitle("Falling Puzzles AI");
@@ -64,8 +64,8 @@ public class GameLoop implements Runnable{
         // Passo tutte le moves possibili come fatti
         for(Move v: this.gp.getGrid().getAllPassibleMove()){
             try{
-                System.out.println(v);
-                facts.addObjectInput(v);//new TileWrapper(t.getX(), t.getY(), t.getType()));
+                //System.out.println(v);
+                facts.addObjectInput(v);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -94,16 +94,19 @@ public class GameLoop implements Runnable{
         Game.getInstance().setGp(gp);
         while(true) {
             Game.getInstance().newRow();
+            handler.removeAll();
+            handler.addProgram(encoding);
             addFacts();
             Output o =  handler.startSync();
             AnswerSets answersets = (AnswerSets) o;
             for(AnswerSet AS: answersets.getAnswersets()){
                 try {
                     for (Object obj : AS.getAtoms()) {
-                        if(!(obj instanceof Move)) continue;
-
-                        Move m = (Move) obj;
-                        Game.getInstance().doMove(m);
+                        if(obj instanceof DoMove) {
+                            DoMove m = (DoMove) obj;
+                            System.out.println(m);
+                            Game.getInstance().doMove(m);
+                        }
                     }
                 }catch (Exception e){
                     e.printStackTrace();

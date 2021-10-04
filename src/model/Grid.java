@@ -26,7 +26,7 @@ public class Grid {
 
     public void setSelectedTile(int x, int y){
 
-       // System.out.println(x+" " +y);
+        //System.out.println(x+" " +y);
         if(selected != null){ selected.setHighlighted(false); }
         selected = tilesObjects[x][y];
         if(selected != null){ selected.setHighlighted(true); }
@@ -124,9 +124,10 @@ public class Grid {
         }
     }
 
-    public void move(boolean dir){
+    public void move(int x, int y, boolean dir){
+        Tile selected = tilesObjects[x][y];
         if(selected != null){
-            if(dir){;// true = dx
+            if(dir){// true = dx
                 if(selected.getY()<7) {
                     if(matrix[selected.getX()][selected.getY()+1] == 0 && tilesObjects[selected.getX()][selected.getY()+1] == null){
                         selected.setY(selected.getY() + 1);
@@ -166,16 +167,16 @@ public class Grid {
             for(int y = WIDTH -1; y>=0; y--){
                 if(matrix[x][y] != 0){
                     cont++;
-                    if(tilesObjects[x][y].isSpecial()){
+                    /*if(tilesObjects[x][y].isSpecial()){
                         isThereASpecial = true;
                         xSpecial= tilesObjects[x][y].getX();
                         ySpecial= tilesObjects[x][y].getY();
                         typeSpecial= tilesObjects[x][y].getType();
-                    }
+                    }*/
                 }
             }
             if(cont >=8){
-                if (isThereASpecial) {
+                /*if (isThereASpecial) {
                     points+= 16; // la tile di per se aggiunge 16 punti extra
                     for(int k = ySpecial; k < ySpecial+typeSpecial; k++){
                         if(matrix[xSpecial-1][k]!=0){
@@ -209,7 +210,7 @@ public class Grid {
                             }
                         }
                     }
-                }
+                }*/
                 for(int k = WIDTH -1; k>=0; k--){
                     setSelectedTile(x,k);
                     matrix[x][k]= 0;
@@ -258,23 +259,24 @@ public class Grid {
         Vector<Move> moves = new Vector<Move>();
         for(Tile t : tiles){
 
-            //controllo a sx
-            int sx = 0;
-            for(int k = (t.getY() + t.getType()) ; k < WIDTH-1; k++){
+            //controllo a dx
+            int dx = 0;
+            for(int k = (t.getY() + t.getType()) ; k < WIDTH; k++){
                 if(matrix[t.getX()][k] == 0){
-                    sx++;
-                    moves.add(new Move(t.getX(), t.getY(), t.getType(), sx));
+                    dx++;
+                    moves.add(new Move(t.getX(), t.getY(), t.getType(), dx));
                 }
                 else{ break; }
             }
 
             //controllo a dx
-            int dx=0;
-            for(int k = t.getY() - 1; k > 1; k--){
-                if(matrix[t.getX()][k] == 0){
-                    dx--;
-                    moves.add(new Move(t.getX(),t.getY(),t.getType(), dx));
+            int sx=0;
+            for(int j = t.getY() - 1; j > 0; j--){
+                if(matrix[t.getX()][j] == 0){
+                    sx--;
+                    moves.add(new Move(t.getX(),t.getY(),t.getType(), sx));
                 }
+                else{ break; }
             }
 
         }
@@ -290,16 +292,6 @@ public class Grid {
             }
             System.out.println(s);
         }
-        System.out.println("--------------------------");
-
-        for (int i = 0; i < HEIGHT; i++){
-            String s= "";
-            for (int j = 0; j < WIDTH; j++){
-                s+= prevmatrix[i][j] + " ";
-            }
-            System.out.println(s);
-        }
-        System.out.println("");
     }
 
 }

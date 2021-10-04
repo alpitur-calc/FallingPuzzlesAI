@@ -53,7 +53,6 @@ public class GraphicPanel extends JPanel {
     }
 
     public void update() {
-        //this.grid.updateGrid();
         repaint();
     }
 
