@@ -13,16 +13,19 @@ public class Move {
     @Param(2)
     private int lenght;
     @Param(3)
-    private int move;
+    private int moveDx;
+    @Param(4)
+    private int moveSx;
 
     public Move() {
     }
 
-    public Move(int x, int y, int lenght, int move) {
+    public Move(int x, int y, int lenght, int moveDx, int moveSx) {
         this.x = x;
         this.y = y;
         this.lenght = lenght;
-        this.move = move;
+        this.moveDx = moveDx;
+        this.moveSx = moveSx;
     }
 
     public int getX() {
@@ -49,12 +52,20 @@ public class Move {
         this.lenght = lenght;
     }
 
-    public int getMove() {
-        return move;
+    public int getMoveDx() {
+        return moveDx;
     }
 
-    public void setMove(int move) {
-        this.move = move;
+    public void setMoveDx(int moveDx) {
+        this.moveDx = moveDx;
+    }
+
+    public int getMoveSx() {
+        return moveSx;
+    }
+
+    public void setMoveSx(int moveSx) {
+        this.moveSx = moveSx;
     }
 
     @Override
@@ -63,7 +74,8 @@ public class Move {
                 "x=" + x +
                 ", y=" + y +
                 ", lenght=" + lenght +
-                ", move=" + move +
+                ", moveDx=" + moveDx +
+                ", moveSx=" + moveSx +
                 '}';
     }
 }

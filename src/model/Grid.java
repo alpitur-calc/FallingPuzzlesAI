@@ -264,7 +264,7 @@ public class Grid {
             for(int k = (t.getY() + t.getType()) ; k < WIDTH; k++){
                 if(matrix[t.getX()][k] == 0){
                     dx++;
-                    moves.add(new Move(t.getX(), t.getY(), t.getType(), dx));
+                    moves.add(new Move(t.getX(), t.getY(), t.getType(), dx, 0));
                 }
                 else{ break; }
             }
@@ -274,7 +274,7 @@ public class Grid {
             for(int j = t.getY() - 1; j > 0; j--){
                 if(matrix[t.getX()][j] == 0){
                     sx--;
-                    moves.add(new Move(t.getX(),t.getY(),t.getType(), sx));
+                    moves.add(new Move(t.getX(),t.getY(),t.getType(), 0, sx));
                 }
                 else{ break; }
             }

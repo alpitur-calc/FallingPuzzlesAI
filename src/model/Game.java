@@ -46,13 +46,13 @@ public class Game {
     }*/
 
     public void doMove(DoMove doMove){
-        if(doMove.getMove() > 0){ // dx
-            for(int k = 0; k < doMove.getMove(); k++){
+        if(doMove.getMoveDx() > 0){ // dx
+            for(int k = 0; k < doMove.getMoveDx(); k++){
                 this.gp.getGrid().move(doMove.getX(), doMove.getY(), true);
             }
         }
-        else if(doMove.getMove() < 0){ // sx
-            for(int k = 0; k > doMove.getMove(); k--){
+        else if(doMove.getMoveSx() < 0){ // sx
+            for(int k = 0; k > doMove.getMoveSx(); k--){
                 this.gp.getGrid().move(doMove.getX(), doMove.getY(), false);
             }
         }

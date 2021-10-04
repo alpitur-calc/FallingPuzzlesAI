@@ -21,7 +21,7 @@ public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
-    private int frequency = 3000; // 60 FPS
+    private int frequency = 15000; // 60 FPS
     private GraphicPanel gp = null;
 
     private static String encodingResource="encodings/logica.txt";
@@ -64,7 +64,7 @@ public class GameLoop implements Runnable{
         // Passo tutte le moves possibili come fatti
         for(Move v: this.gp.getGrid().getAllPassibleMove()){
             try{
-                //System.out.println(v);
+                System.out.println(v);
                 facts.addObjectInput(v);
             }catch(Exception e){
                 e.printStackTrace();
