@@ -92,6 +92,7 @@ public class GameLoop implements Runnable{
     @Override
     public void run() {
         Game.getInstance().setGp(gp);
+        Game.getInstance().newRow();
         while(true) {
             Game.getInstance().newRow();
             handler.removeAll();

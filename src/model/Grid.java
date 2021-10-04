@@ -269,7 +269,7 @@ public class Grid {
                 else{ break; }
             }
 
-            //controllo a dx
+            //controllo a sx
             int sx=0;
             for(int j = t.getY() - 1; j >= 0; j--){
                 if(matrix[t.getX()][j] == 0){
