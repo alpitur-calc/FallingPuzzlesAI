@@ -21,7 +21,7 @@ public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
-    private int frequency = 15000; // 60 FPS
+    private int frequency = 5000; // 60 FPS
     private GraphicPanel gp = null;
 
     private static String encodingResource="encodings/logica.txt";
@@ -71,13 +71,13 @@ public class GameLoop implements Runnable{
             }
         }
 
-        for(Tile t: this.gp.getGrid().getTiles()){
+        /*for(Tile t: this.gp.getGrid().getTiles()){
             try{
                 facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
             }catch(Exception e){
                 e.printStackTrace();
             }
-        }
+        }*/
 
         for(Tile t: this.gp.getGrid().getEmptyTiles()){
             try{
@@ -103,6 +103,8 @@ public class GameLoop implements Runnable{
             for(AnswerSet AS: answersets.getAnswersets()){
                 try {
                     for (Object obj : AS.getAtoms()) {
+                        System.out.println(obj);
+                        System.out.println("ciao");
                         if(obj instanceof DoMove) {
                             DoMove m = (DoMove) obj;
                             System.out.println(m);
