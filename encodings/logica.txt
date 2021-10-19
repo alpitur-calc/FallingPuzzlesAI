@@ -12,9 +12,9 @@ freeSpaceFT(FROM, TO, X) :- freeSpace(X,FROM), freeSpace(X,FROM+1), TO = FROM + 
 freeSpaceFT(FROM, TO+1, X) :- freeSpaceFT(FROM, TO, X), freeSpace(X,TO+1). % se cè uno spazio vuoto da X a Y e uno da Y+1 a Z allora ci sarà uno spazio vuoto da X a Z
 
 %                          6 0 2  3  0                3    4  7         2        2             3
-doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, S==0, DX==FROM-Y.
+DoMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, S==0, DX==FROM-Y.
                            6 6 2 0  3                3     4  7                         3
-doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, S==Y-FROM, DX==0.
+DoMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, S==Y-FROM, DX==0.
 
 %se cè uno spazio vuoto nella riga di sotto spostati per occuparlo
 
