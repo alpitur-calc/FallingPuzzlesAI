@@ -266,7 +266,7 @@ public class Grid {
         return v;
     }
 
-    public Vector<Move> getAllPassibleMove(){
+    public Vector<Move> getAllPossibleMove(){
         Vector<Move> moves = new Vector<Move>();
         for(Tile t : tiles){
 

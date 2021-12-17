@@ -43,4 +43,13 @@ public class Tile {
     }
 
     public boolean isSpecial(){ return this.special; }
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "type=" + type +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

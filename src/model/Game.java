@@ -50,23 +50,27 @@ public class Game {
             for(int k = 0; k < doMove.getMoveDx(); k++){
                 //this.gp.getGrid().move(doMove.getX(), doMove.getY(), true);
                 // X e Y sono invertite perchè sono stupido
-                this.move(doMove.getY(), doMove.getX(), true);
+                this.move(doMove.getY(), doMove.getX()+k, true);
+                //System.out.println(k);
             }
         }
         else if(doMove.getMoveSx() > 0){ // sx
             for(int k = 0; k < doMove.getMoveSx(); k++){
                 //this.gp.getGrid().move(doMove.getX(), doMove.getY(), false);
                 // X e Y sono invertite perchè sono stupido
-                this.move(doMove.getY(), doMove.getX(), false);
+                this.move(doMove.getY(), doMove.getX()-k, false);
             }
         }
-        System.out.println("MUOVO");
+        //System.out.println("MUOVO");
         gravity();
     }
 
     public void move(int x, int y, boolean dir){
         //this.gp.getGrid().move(x, y, dir);
         Tile selected = this.gp.getGrid().getTilesObjects()[x][y];
+
+        //System.out.print(x + " " + y +" -> ");System.out.println(selected);
+
         if(selected != null){
             if(dir){// true = dx
                 if(selected.getY()<7) {

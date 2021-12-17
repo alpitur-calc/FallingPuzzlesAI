@@ -15,13 +15,12 @@ import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
-import java.util.Vector;
 
 public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
-    private int frequency = 10000; // 60 FPS
+    private int frequency = 1000; // 60 FPS
     private GraphicPanel gp = null;
     private Boolean canContinue = true;
 
@@ -63,7 +62,7 @@ public class GameLoop implements Runnable{
         InputProgram facts= new ASPInputProgram();
 
         // Passo tutte le moves possibili come fatti
-        for(Move v: this.gp.getGrid().getAllPassibleMove()){
+        for(Move v: this.gp.getGrid().getAllPossibleMove()){
             try{
                 //System.out.println(v);
                 facts.addObjectInput(v);
@@ -123,6 +122,7 @@ public class GameLoop implements Runnable{
                 }
             }
 
+            //Game.getInstance().printMatrix();
             if(Game.getInstance().isDead()){Game.getInstance().reset();}
             try {
                 Thread.sleep(frequency);
