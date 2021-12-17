@@ -25,7 +25,6 @@ public class Grid {
     }
 
     public void setSelectedTile(int x, int y){
-
         //System.out.println(x+" " +y);
         if(selected != null){ selected.setHighlighted(false); }
         selected = tilesObjects[x][y];
@@ -55,9 +54,13 @@ public class Grid {
         Random r = new Random();
 
         while(lenght < maxLenght){// && ntiles < 4){
-            int type= r.nextInt(3)+1, x= 9, y= r.nextInt(8);
+            int type= 0, x= 9, y= r.nextInt(8);
             boolean special = false;
             //if(r.nextInt(100) % 15 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
+            int rand = r.nextInt(100);
+            if(rand >=0 && rand < 25){ type = 1; }
+            if(rand >=25 && rand < 75){ type = 2; }
+            if(rand >=75 && rand < 100){ type = 3; }
             Tile tile= new Tile(type, x, y, special);
 
             if( (y + tile.getType())-1 < 8 && (tile.getType()+lenght) <= maxLenght){
@@ -123,7 +126,7 @@ public class Grid {
             }
         }
     }
-
+    //DA CANCELLARE ?
     public void move(int x, int y, boolean dir){
         Tile selected = tilesObjects[x][y];
         if(selected != null){
@@ -162,8 +165,8 @@ public class Grid {
         int points = 0;
         for(int x = HEIGHT -1; x >=0; x--){
             int cont = 0;
-            boolean isThereASpecial = false;
-            int xSpecial = -1, ySpecial = -1, typeSpecial = -1;
+            //boolean isThereASpecial = false;
+            //int xSpecial = -1, ySpecial = -1, typeSpecial = -1;
             for(int y = WIDTH -1; y>=0; y--){
                 if(matrix[x][y] != 0){
                     cont++;
@@ -243,6 +246,14 @@ public class Grid {
 
     public Vector<Tile> getTiles(){
         return this.tiles;
+    }
+
+    public Tile[][] getTilesObjects() {
+        return tilesObjects;
+    }
+
+    public Integer[][] getMatrix() {
+        return matrix;
     }
 
     public Vector<Tile> getEmptyTiles(){

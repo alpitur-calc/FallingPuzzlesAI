@@ -21,8 +21,8 @@ public class Move {
     }
 
     public Move(int x, int y, int lenght, int moveDx, int moveSx) {
-        this.x = x;
-        this.y = y;
+        this.x = y;
+        this.y = x;
         this.lenght = lenght;
         this.moveDx = moveDx;
         this.moveSx = moveSx;

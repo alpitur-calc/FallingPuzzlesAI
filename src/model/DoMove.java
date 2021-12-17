@@ -69,7 +69,7 @@ public class DoMove {
 
     @Override
     public String toString() {
-        return "Move{" +
+        return "DoMove{" +
                 "x=" + x +
                 ", y=" + y +
                 ", lenght=" + lenght +

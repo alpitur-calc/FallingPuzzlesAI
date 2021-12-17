@@ -15,8 +15,8 @@ public class TileWrapper {
     public TileWrapper(){}
 
     public TileWrapper(int x, int y, int type) {
-        this.x = x;
-        this.y = y;
+        this.x = y;
+        this.y = x;
         this.type = type;
     }
 

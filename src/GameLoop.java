@@ -21,8 +21,9 @@ public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
-    private int frequency = 5000; // 60 FPS
+    private int frequency = 10000; // 60 FPS
     private GraphicPanel gp = null;
+    private Boolean canContinue = true;
 
     private static String encodingResource="encodings/logica.txt";
     private Handler handler;
@@ -64,20 +65,20 @@ public class GameLoop implements Runnable{
         // Passo tutte le moves possibili come fatti
         for(Move v: this.gp.getGrid().getAllPassibleMove()){
             try{
-                System.out.println(v);
+                //System.out.println(v);
                 facts.addObjectInput(v);
             }catch(Exception e){
                 e.printStackTrace();
             }
         }
 
-        /*for(Tile t: this.gp.getGrid().getTiles()){
+        for(Tile t: this.gp.getGrid().getTiles()){
             try{
                 facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
             }catch(Exception e){
                 e.printStackTrace();
             }
-        }*/
+        }
 
         for(Tile t: this.gp.getGrid().getEmptyTiles()){
             try{
@@ -94,17 +95,23 @@ public class GameLoop implements Runnable{
         Game.getInstance().setGp(gp);
         Game.getInstance().newRow();
         while(true) {
+
             Game.getInstance().newRow();
+
             handler.removeAll();
             handler.addProgram(encoding);
             addFacts();
             Output o =  handler.startSync();
             AnswerSets answersets = (AnswerSets) o;
+
             for(AnswerSet AS: answersets.getAnswersets()){
+                System.out.println("ANS:");
                 try {
                     for (Object obj : AS.getAtoms()) {
-                        System.out.println(obj);
-                        System.out.println("ciao");
+                        //System.out.println("Obj :" + obj);
+
+                        //if(obj instanceof Move ) { System.out.println(obj); }
+
                         if(obj instanceof DoMove) {
                             DoMove m = (DoMove) obj;
                             System.out.println(m);
@@ -122,6 +129,7 @@ public class GameLoop implements Runnable{
             } catch (InterruptedException e) {
                 break;
             }
+
         }
 
         System.out.println("DEAD");

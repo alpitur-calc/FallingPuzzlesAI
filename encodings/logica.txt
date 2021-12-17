@@ -1,25 +1,31 @@
-row(0..9).
-col(0..7).
-distance(-5..5).
-
+% fatti di prova del quaderno. (MOSSA ATTESA = doMove(4,0,2,2,0).)
+%move(1,0,1,0,1).move(2,0,1,1,0).move(4,0,2,0,1).move(4,0,2,1,0).move(4,0,2,2,0).move(3,1,3,1,0).move(3,1,3,2,0).move(4,2,2,1,0).move(7,2,1,0,1).
+%tile(0,0,0).tile(3,0,0).tile(6,0,0).tile(7,0,0).tile(6,1,0).tile(7,1,0).tile(6,2,0).
 
 doMove(X,Y,T,D,S) | dontMove(X,Y,T,D,S) :- move(X,Y,T,D,S).
 
+%se cè una tile vuota nello spazio X Y allora quello spazio è vuoto
+freeSpace(X,Y):-tile(X,Y,0).
+%se cè uno spazio vuoto in pos. X Y allora cè uno spazio vuoto da X a Y
+%           3 3 5              5 3
+freeSpaceFT(X,X,Y):- freeSpace(X,Y).
+% se cè uno spazio vuoto da X a Y e uno da Y+1 a Z allora ci sarà uno spazio vuoto da X a Z
+%            2      3   4                   2   2   4              3    4
+freeSpaceFT(FROM, TO+1, X) :- freeSpaceFT(FROM, TO, X), freeSpace(TO+1, X).
 
-freeSpace(X,Y):-tile(X,Y,0). %se cè una tile vuota nello spazio X Y allora quello spazio è vuoto
-freeSpaceFT(Y,Y,X):- freeSpace(X,Y). %se cè uno spazio vuoto in pos. X Y allora cè uno spazio vuoto da X a Y
-freeSpaceFT(FROM, TO, X) :- freeSpace(X,FROM), freeSpace(X,FROM+1), TO = FROM + 1. % se cè uno spazio vuoto sulla colonna Y e uno sulla colonna Y+1 allora cè uno spazio vuoto da Y a Y+1
-freeSpaceFT(FROM, TO+1, X) :- freeSpaceFT(FROM, TO, X), freeSpace(X,TO+1). % se cè uno spazio vuoto da X a Y e uno da Y+1 a Z allora ci sarà uno spazio vuoto da X a Z
+%      4 7 2 2  0          4 7 2 2  0                6    7   8     7  6    (2)  2  2    6  4
+doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 >= T, DX==FROM-X.  %>=   >ok  =superok
+%      2 3 2 0  2          2 3 2 1  2                0    1  4      1  0   (2)   2  2   2  0
+doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 >= T, SX==X-FROM.
 
-%                          6 0 2  3  0                3    4  7         2        2             3
-doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, SX==0, DX==FROM-Y+1.
-                           6 6 2 0  3                3     4  7                         3
-doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, SX==Y-FROM+1, DX==0.
+% doMove(X,Y,T,DX,SX):- move(X,Y,T,DX,SX).
 
 %se cè uno spazio vuoto nella riga di sotto spostati per occuparlo
 
-
-:- #count{X,Y,T,D,S: doMove(X,Y,T,S,D)} >1.
-:- doMove(X,Y,0,D,S). %non puoi muovere tile vuote
+:- #count{X,Y,T,D,S: doMove(X,Y,T,S,D)} != 1. %devesserci almeno una mossa.
+:- doMove(X,Y,0,D,S). %non puoi muovere tile vuote.
 :- doMove(X,Y,T,0,0). %non puoi muovere di 0 spazi.
 :- doMove(X,Y,T,D,S), S<>0, D<>0. %non puoi muovere sia a sinistra che a destra.
+
+%:~dontMove(X,Y,T,DX,SX),move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, SX==0, DX==FROM-Y+1. [1@1]
+%:~dontMove(X,Y,T,DX,SX),move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,X+1), TO-FROM +1 >= T, SX==Y-FROM+1, DX==0. [1@1]
