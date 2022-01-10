@@ -15,6 +15,7 @@ import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
+import java.io.PrintWriter;
 
 public class GameLoop implements Runnable{
 

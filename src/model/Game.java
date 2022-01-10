@@ -81,7 +81,7 @@ public class Game {
                         this.gp.sleep(pauses);
                     }
                 }
-                if(selected.getY()<6) {
+                else if(selected.getY()<6) {
                     if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()+2] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()+2] == null){
                         selected.setY(selected.getY() + 1);
                         this.gp.getGrid().updateGrid();
@@ -89,7 +89,7 @@ public class Game {
                         this.gp.sleep(pauses);
                     }
                 }
-                if(selected.getY()<5) {
+                else if(selected.getY()<5) {
                     if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()+3] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()+3] == null){
                         selected.setY(selected.getY() + 1);
                         this.gp.getGrid().updateGrid();
