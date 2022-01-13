@@ -15,7 +15,6 @@ import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
-import java.io.PrintWriter;
 
 public class GameLoop implements Runnable{
 
@@ -99,8 +98,8 @@ public class GameLoop implements Runnable{
             Game.getInstance().newRow();
 
             handler.removeAll();
-            handler.addProgram(encoding);
             addFacts();
+            handler.addProgram(encoding);
             Output o =  handler.startSync();
             AnswerSets answersets = (AnswerSets) o;
 
@@ -109,12 +108,11 @@ public class GameLoop implements Runnable{
                 try {
                     for (Object obj : AS.getAtoms()) {
                         //System.out.println("Obj :" + obj);
-
-                        //if(obj instanceof Move ) { System.out.println(obj); }
+                        //if(obj instanceof Move  || obj instanceof DoMove) { System.out.println(obj); }
 
                         if(obj instanceof DoMove) {
                             DoMove m = (DoMove) obj;
-                            System.out.println(m);
+                            //System.out.println(m);
                             Game.getInstance().doMove(m);
                         }
                     }
