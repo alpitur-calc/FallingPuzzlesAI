@@ -21,8 +21,8 @@ public class Move {
     }
 
     public Move(int x, int y, int lenght, int moveDx, int moveSx) {
-        this.x = y;
-        this.y = x;
+        this.x = x;
+        this.y = y;
         this.lenght = lenght;
         this.moveDx = moveDx;
         this.moveSx = moveSx;
@@ -77,5 +77,9 @@ public class Move {
                 ", moveDx=" + moveDx +
                 ", moveSx=" + moveSx +
                 '}';
+    }
+
+    public String toFact(){
+        return "move(" + x + "," + y + "," + lenght + "," + moveDx + "," + moveSx + ").";
     }
 }
