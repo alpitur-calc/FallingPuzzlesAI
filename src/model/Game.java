@@ -50,7 +50,7 @@ public class Game {
             for(int k = 0; k < doMove.getMoveDx(); k++){
                 //this.gp.getGrid().move(doMove.getX(), doMove.getY(), true);
                 // X e Y sono invertite perchè sono stupido
-                this.move(doMove.getY(), doMove.getX()+k, true);
+                this.move(doMove.getX()+k, doMove.getY(), true);
                 //System.out.println(k);
             }
         }
@@ -58,7 +58,7 @@ public class Game {
             for(int k = 0; k < doMove.getMoveSx(); k++){
                 //this.gp.getGrid().move(doMove.getX(), doMove.getY(), false);
                 // X e Y sono invertite perchè sono stupido
-                this.move(doMove.getY(), doMove.getX()-k, false);
+                this.move(doMove.getX()-k, doMove.getY(), false);
             }
         }
         //System.out.println("MUOVO");
@@ -73,25 +73,25 @@ public class Game {
 
         if(selected != null){
             if(dir){// true = dx
-                if(selected.getY()<7) {
-                    if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()+1] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()+1] == null){
-                        selected.setY(selected.getY() + 1);
+                if(selected.getX()<7) {
+                    if(this.gp.getGrid().getMatrix()[selected.getX()+1][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+1][selected.getY()] == null){
+                        selected.setX(selected.getX() + 1);
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);
                     }
                 }
-                else if(selected.getY()<6) {
-                    if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()+2] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()+2] == null){
-                        selected.setY(selected.getY() + 1);
+                else if(selected.getX()<6) {
+                    if(this.gp.getGrid().getMatrix()[selected.getX()+2][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+2][selected.getY()] == null){
+                        selected.setX(selected.getX() + 1);
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);
                     }
                 }
-                else if(selected.getY()<5) {
-                    if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()+3] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()+3] == null){
-                        selected.setY(selected.getY() + 1);
+                else if(selected.getX()<5) {
+                    if(this.gp.getGrid().getMatrix()[selected.getX()+3][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+3][selected.getY()] == null){
+                        selected.setX(selected.getX() + 1);
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);
@@ -99,9 +99,9 @@ public class Game {
                 }
             }
             else{  // false = sx
-                if(selected.getY()>0) {
-                    if(this.gp.getGrid().getMatrix()[selected.getX()][selected.getY()-1] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()][selected.getY()-1] == null){
-                        selected.setY(selected.getY() - 1);
+                if(selected.getX()>0) {
+                    if(this.gp.getGrid().getMatrix()[selected.getX()-1][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()-1][selected.getY()] == null){
+                        selected.setX(selected.getX() - 1);
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);

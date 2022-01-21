@@ -15,12 +15,14 @@ import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
-import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GameLoop implements Runnable{
 
     private static final int WIDTH= 425, HEIGHT= 550;
 
+    private int iterations = 0;
     private int frequency = 1000; // 60 FPS
     private GraphicPanel gp = null;
     private Boolean canContinue = true;
@@ -59,35 +61,49 @@ public class GameLoop implements Runnable{
         f.setResizable(false);
     }
 
-    private void addFacts(){
-        InputProgram facts= new ASPInputProgram();
+    private void addFacts() {
+        InputProgram facts = new ASPInputProgram();
 
-        // Passo tutte le moves possibili come fatti
-        for(Move v: this.gp.getGrid().getAllPossibleMove()){
-            try{
-                //System.out.println(v);
-                facts.addObjectInput(v);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
+        //try {
+            //FileWriter myWriter = new FileWriter("lib/debug/filename" + iterations + ".txt");
 
-        for(Tile t: this.gp.getGrid().getTiles()){
-            try{
-                facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
-            }catch(Exception e){
-                e.printStackTrace();
+            // Passo tutte le moves possibili come fatti
+            for (Move v : this.gp.getGrid().getAllPossibleMove()) {
+                try {
+                    //System.out.println(v);
+                    facts.addObjectInput(v);
+                    //myWriter.write(v.toFact());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            //myWriter.write("\n");
+            for (Tile t : this.gp.getGrid().getTiles()) {
+                try {
+                    facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
+                    //myWriter.write(t.toFact());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-        for(Tile t: this.gp.getGrid().getEmptyTiles()){
-            try{
-                facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
-            }catch(Exception e){
-                e.printStackTrace();
+            for (Tile t : this.gp.getGrid().getEmptyTiles()) {
+                try {
+                    facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
+                    //myWriter.write(t.toFact());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        handler.addProgram(facts);
+            handler.addProgram(facts);
+            /*myWriter.write("\n");
+            myWriter.write(encoding.getPrograms());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }*/
     }
 
     @Override
@@ -99,8 +115,8 @@ public class GameLoop implements Runnable{
             Game.getInstance().newRow();
 
             handler.removeAll();
-            handler.addProgram(encoding);
             addFacts();
+            handler.addProgram(encoding);
             Output o =  handler.startSync();
             AnswerSets answersets = (AnswerSets) o;
 
@@ -109,8 +125,7 @@ public class GameLoop implements Runnable{
                 try {
                     for (Object obj : AS.getAtoms()) {
                         //System.out.println("Obj :" + obj);
-
-                        //if(obj instanceof Move ) { System.out.println(obj); }
+                        //if(obj instanceof Move  || obj instanceof DoMove) { System.out.println(obj); }
 
                         if(obj instanceof DoMove) {
                             DoMove m = (DoMove) obj;
@@ -122,9 +137,9 @@ public class GameLoop implements Runnable{
                     e.printStackTrace();
                 }
             }
-
+            iterations ++;
             //Game.getInstance().printMatrix();
-            if(Game.getInstance().isDead()){Game.getInstance().reset();}
+            if(Game.getInstance().isDead()){Game.getInstance().reset(); iterations = 0;}
             try {
                 Thread.sleep(frequency);
             } catch (InterruptedException e) {

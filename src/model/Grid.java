@@ -14,11 +14,12 @@ public class Grid {
     private boolean full = false, falling = false;
     private Tile selected = null;
     private int multiplier = 1;
+    private int highestOccupiedRow = 9;
 
     public Grid() {
-        matrix = new Integer[HEIGHT][WIDTH];
-        prevmatrix = new Integer[HEIGHT][WIDTH];
-        tilesObjects = new Tile[HEIGHT][WIDTH];
+        matrix = new Integer[WIDTH][HEIGHT];
+        prevmatrix = new Integer[WIDTH][HEIGHT];
+        tilesObjects = new Tile[WIDTH][HEIGHT];
         resetMatrix();
         tiles = new Vector<Tile>();
         updateGrid();
@@ -32,8 +33,8 @@ public class Grid {
     }
 
     private void resetMatrix(){
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++){
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++){
                 matrix[i][j] = 0;
                 tilesObjects[i][j] = null;
             }
@@ -41,8 +42,8 @@ public class Grid {
     }
 
     private void setPrevmatrix(){
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++){
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++){
                 prevmatrix[i][j]= matrix[i][j];
             }
         }
@@ -54,7 +55,7 @@ public class Grid {
         Random r = new Random();
 
         while(lenght < maxLenght){// && ntiles < 4){
-            int type= 0, x= 9, y= r.nextInt(8);
+            int type= 0, y= 9, x= r.nextInt(8);
             boolean special = false;
             //if(r.nextInt(100) % 15 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
             int rand = r.nextInt(100);
@@ -63,7 +64,7 @@ public class Grid {
             if(rand >=75 && rand < 100){ type = 3; }
             Tile tile= new Tile(type, x, y, special);
 
-            if( (y + tile.getType())-1 < 8 && (tile.getType()+lenght) <= maxLenght){
+            if( (x + tile.getType())-1 < 8 && (tile.getType()+lenght) <= maxLenght){
                 if(!this.overlap(tile.getType(), tile.getX(), tile.getY())){
                     lenght+= tile.getType();
                     //ntiles+= 1;
@@ -77,16 +78,16 @@ public class Grid {
 
     private boolean overlap(int type, int x, int y){
         boolean does = false;
-        if(x>=10){ return does; }
-        for(int k = y; k < y+type; k++){
-            if(matrix[x][k] != 0){ does = true; }
+        if(y>=10){ return does; }
+        for(int k = x; k < x+type; k++){
+            if(matrix[k][y] != 0){ does = true; }
         }
         return does;
     }
 
     private boolean areMatrixEqual(){
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++) {
                 if(!Objects.equals(matrix[i][j], prevmatrix[i][j])){
                     return false;
                 }
@@ -97,7 +98,7 @@ public class Grid {
 
     private void rowsUp(){
         for(Tile t : this.tiles){
-            t.setX(t.getX()-1);
+            t.setY(t.getY()-1);
         }
         this.updateGrid();
     }
@@ -107,8 +108,8 @@ public class Grid {
         for(int i = this.tiles.size()-1; i>=0; i--){
             Tile t = tiles.get(i);
             boolean overlap = false;
-            if((t.getX()+1) < 10 & !overlap(t.getType(), t.getX()+1, t.getY())){
-                t.setX(t.getX()+1);
+            if((t.getY()+1) < 10 & !overlap(t.getType(), t.getX(), t.getY()+1)){
+                t.setY(t.getY()+1);
             }
             updateGrid();
         }
@@ -118,11 +119,11 @@ public class Grid {
     public void updateGrid(){
         resetMatrix();
         for(Tile t : this.tiles){
-            if(t.getX() == 0){ this.full = true; return;} // se trovo una tile sulla prima riga allora ho perso
+            if(t.getY() == 0){ this.full = true; return;} // se trovo una tile sulla prima riga allora ho perso
 
-            for(int k = t.getY(); k < t.getY()+t.getType(); k++){
-                this.matrix[t.getX()][k]= t.getType();
-                this.tilesObjects[t.getX()][k] = t;
+            for(int k = t.getX(); k < t.getX()+t.getType(); k++){
+                this.matrix[k][t.getY()]= t.getType();
+                this.tilesObjects[k][t.getY()] = t;
             }
         }
     }
@@ -163,11 +164,11 @@ public class Grid {
 
     public int checkFullRows(){
         int points = 0;
-        for(int x = HEIGHT -1; x >=0; x--){
+        for(int y = HEIGHT -1; y >=0; y--){
             int cont = 0;
             //boolean isThereASpecial = false;
             //int xSpecial = -1, ySpecial = -1, typeSpecial = -1;
-            for(int y = WIDTH -1; y>=0; y--){
+            for(int x = WIDTH -1; x>=0; x--){
                 if(matrix[x][y] != 0){
                     cont++;
                     /*if(tilesObjects[x][y].isSpecial()){
@@ -215,9 +216,9 @@ public class Grid {
                     }
                 }*/
                 for(int k = WIDTH -1; k>=0; k--){
-                    setSelectedTile(x,k);
-                    matrix[x][k]= 0;
-                    tilesObjects[x][k]= null;
+                    setSelectedTile(k,y);
+                    matrix[k][y]= 0;
+                    tilesObjects[k][y]= null;
                     if(selected != null){
                         tiles.remove(selected);
                     }
@@ -258,10 +259,17 @@ public class Grid {
 
     public Vector<Tile> getEmptyTiles(){
         Vector<Tile> v = new Vector<Tile>();
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++){
-                if( matrix[i][j] == 0){ v.add(new Tile(0, i, j, false)); }
+        int k=0;
+        boolean top = false;
+        for (int j = HEIGHT-1 ; j >= 0 && !top ; j--) {
+            for (int i = WIDTH-1 ; i >=0 && k<8 ; i--){
+                if( matrix[i][j] == 0){
+                    v.add(new Tile(0, i, j, false));
+                    k++;
+                }
             }
+            if(k>=8){ top = true; }
+            else{ k=0; }
         }
         return v;
     }
@@ -272,8 +280,8 @@ public class Grid {
 
             //controllo a dx
             int dx = 0;
-            for(int k = (t.getY() + t.getType()) ; k < WIDTH; k++){
-                if(matrix[t.getX()][k] == 0){
+            for(int k = (t.getX() + t.getType()) ; k < WIDTH; k++){
+                if(matrix[k][t.getY()] == 0){
                     dx++;
                     moves.add(new Move(t.getX(), t.getY(), t.getType(), dx, 0));
                 }
@@ -282,8 +290,8 @@ public class Grid {
 
             //controllo a sx
             int sx=0;
-            for(int j = t.getY() - 1; j >= 0; j--){
-                if(matrix[t.getX()][j] == 0){
+            for(int j = t.getX() - 1; j >= 0; j--){
+                if(matrix[j][t.getY()] == 0){
                     sx++;
                     moves.add(new Move(t.getX(),t.getY(),t.getType(), 0, sx));
                 }
@@ -296,9 +304,9 @@ public class Grid {
     }
 
     public void printMatrix(){
-        for (int i = 0; i < HEIGHT; i++){
+        for (int j = 0; j < HEIGHT; j++){
             String s= "";
-            for (int j = 0; j < WIDTH; j++){
+            for (int i = 0; i < WIDTH; i++){
                 s+= matrix[i][j] + " ";
             }
             System.out.println(s);

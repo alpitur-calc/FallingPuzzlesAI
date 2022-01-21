@@ -22,7 +22,7 @@ public class GraphicPanel extends JPanel {
         this.invalidate();
 
         g.setColor(Color.BLACK);
-        for(int i = 0; i< this.grid.WIDTH; i++){
+        for(int i = 0; i < this.grid.WIDTH; i++){
             for(int j = 0; j < this.grid.HEIGHT; j++){
                 g.drawRect( i * DIM, j * DIM, DIM, DIM);
 
@@ -37,14 +37,14 @@ public class GraphicPanel extends JPanel {
                 default: g.setColor(Color.WHITE);
             }
             if(t.isSpecial()){ g.setColor(Color.MAGENTA); }
-            g.fillRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+            g.fillRect(t.getX() * DIM, t.getY() * DIM, DIM * t.getType(), DIM);
             if(t.isHighlighted()){
                 g.setColor(Color.YELLOW);
-                g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+                g.drawRect(t.getX() * DIM, t.getY() * DIM, DIM * t.getType(), DIM);
             }
             else {
                 g.setColor(Color.BLACK);
-                g.drawRect(t.getY() * DIM, t.getX() * DIM, DIM * t.getType(), DIM);
+                g.drawRect(t.getX() * DIM, t.getY() * DIM, DIM * t.getType(), DIM);
             }
         }
 

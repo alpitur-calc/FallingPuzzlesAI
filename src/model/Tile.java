@@ -52,4 +52,8 @@ public class Tile {
                 ", y=" + y +
                 '}';
     }
+
+    public String toFact(){
+        return "tile(" + x + "," + y + "," + type + ").";
+    };
 }

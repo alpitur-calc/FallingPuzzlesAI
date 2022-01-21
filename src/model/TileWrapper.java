@@ -52,4 +52,8 @@ public class TileWrapper {
                 ", type=" + type +
                 '}';
     }
+
+    public String toFact(){
+        return "tile(" + x + "," + y + "," + type + ").";
+    }
 }
