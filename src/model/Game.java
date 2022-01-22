@@ -68,30 +68,34 @@ public class Game {
     public void move(int x, int y, boolean dir){
         //this.gp.getGrid().move(x, y, dir);
         Tile selected = this.gp.getGrid().getTilesObjects()[x][y];
-
+        boolean moved = false;
         //System.out.print(x + " " + y +" -> ");System.out.println(selected);
 
         if(selected != null){
             if(dir){// true = dx
-                if(selected.getX()<7) {
+                if(selected.getX()<7 && !moved) {
                     if(this.gp.getGrid().getMatrix()[selected.getX()+1][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+1][selected.getY()] == null){
                         selected.setX(selected.getX() + 1);
+                        moved = true;
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);
                     }
                 }
-                else if(selected.getX()<6) {
+                if(selected.getX()<6 && !moved) {
                     if(this.gp.getGrid().getMatrix()[selected.getX()+2][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+2][selected.getY()] == null){
                         selected.setX(selected.getX() + 1);
+                        moved = true;
+
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);
                     }
                 }
-                else if(selected.getX()<5) {
+                if(selected.getX()<5 && !moved) {
                     if(this.gp.getGrid().getMatrix()[selected.getX()+3][selected.getY()] == 0 && this.gp.getGrid().getTilesObjects()[selected.getX()+3][selected.getY()] == null){
                         selected.setX(selected.getX() + 1);
+                        moved = true;
                         this.gp.getGrid().updateGrid();
                         this.gp.repaint();
                         this.gp.sleep(pauses);

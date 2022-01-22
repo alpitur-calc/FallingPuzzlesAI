@@ -139,15 +139,16 @@ public class GameLoop implements Runnable{
             }
             iterations ++;
             //Game.getInstance().printMatrix();
-            if(Game.getInstance().isDead()){Game.getInstance().reset(); iterations = 0;}
+            if(Game.getInstance().isDead()){
+                Game.getInstance().reset();
+                iterations = 0;
+                System.out.println("DEAD! Resetting game.");
+            }
             try {
                 Thread.sleep(frequency);
             } catch (InterruptedException e) {
                 break;
             }
-
         }
-
-        System.out.println("DEAD");
     }
 }
