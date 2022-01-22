@@ -64,7 +64,7 @@ public class GameLoop implements Runnable{
     private void addFacts() {
         InputProgram facts = new ASPInputProgram();
 
-        //try {
+       // try {
             //FileWriter myWriter = new FileWriter("lib/debug/filename" + iterations + ".txt");
 
             // Passo tutte le moves possibili come fatti
@@ -72,7 +72,7 @@ public class GameLoop implements Runnable{
                 try {
                     //System.out.println(v);
                     facts.addObjectInput(v);
-                    //myWriter.write(v.toFact());
+                   // myWriter.write(v.toFact());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -90,7 +90,7 @@ public class GameLoop implements Runnable{
             for (Tile t : this.gp.getGrid().getEmptyTiles()) {
                 try {
                     facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
-                    //myWriter.write(t.toFact());
+                   // myWriter.write(t.toFact());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -119,9 +119,11 @@ public class GameLoop implements Runnable{
             handler.addProgram(encoding);
             Output o =  handler.startSync();
             AnswerSets answersets = (AnswerSets) o;
-
+            boolean moved= false;
+            //for(AnswerSet AS: answersets.getOptimalAnswerSets()){
             for(AnswerSet AS: answersets.getAnswersets()){
-                System.out.println("ANS:");
+
+                    System.out.println("ANS:");
                 try {
                     for (Object obj : AS.getAtoms()) {
                         //System.out.println("Obj :" + obj);
@@ -131,11 +133,14 @@ public class GameLoop implements Runnable{
                             DoMove m = (DoMove) obj;
                             System.out.println(m);
                             Game.getInstance().doMove(m);
+                            moved = true;
+                            break;
                         }
                     }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+                if(moved) { break; }
             }
             iterations ++;
             //Game.getInstance().printMatrix();
