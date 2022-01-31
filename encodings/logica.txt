@@ -34,3 +34,4 @@ liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), X2D=X2U, TD>=TU, tile(X1U, 
 :- doMove(X,Y,T,0,0). %non puoi muovere di 0 spazi.
 :- doMove(X,Y,T,D,S), S<>0, D<>0. %non puoi muovere sia a sinistra che a destra.
 :~ doMove(A,B,C,D,E). [1@1]  % questo weak serve per assegnare un costo fittizio a ogni do move
+% Commento
