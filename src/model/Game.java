@@ -7,7 +7,7 @@ public class Game {
     private static Game instance = null;
     private GraphicPanel gp = null;
     private int points = 0;
-    private int pauses = 300;
+    private int pauses = 200;
 
     private Game(){}
 
@@ -23,10 +23,16 @@ public class Game {
     private void gravity(){
         gp.getGrid().setFalling(true);
         while(gp.getGrid().isFalling()){
-            gp.getGrid().fall();
-            gp.repaint();
-            this.gp.sleep(pauses);
-            points += gp.getGrid().checkFullRows();
+            while(gp.getGrid().isFalling()){
+                gp.getGrid().fall();
+                gp.repaint();
+                this.gp.sleep(pauses);
+            }
+            int p= gp.getGrid().checkFullRows();
+            if(p!=0){
+                points+=p;
+                this.gp.getGrid().setFalling(true);
+            }
             gp.repaint();
             this.gp.sleep(pauses);
         }

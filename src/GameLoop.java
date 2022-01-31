@@ -15,8 +15,7 @@ import model.*;
 import view.GraphicPanel;
 
 import javax.swing.*;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileReader;
 
 public class GameLoop implements Runnable{
 
@@ -36,23 +35,31 @@ public class GameLoop implements Runnable{
     }
 
     public void main(){
+        // Creo l'handler
         handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
+
+        // Registro tutte le classi dei fatti
         try {
             ASPMapper.getInstance().registerClass(Move.class);
             ASPMapper.getInstance().registerClass(TileWrapper.class);
             ASPMapper.getInstance().registerClass(DoMove.class);
+            ASPMapper.getInstance().registerClass(TappaBuco.class);
+            ASPMapper.getInstance().registerClass(LiberaSopra.class);
         } catch (ObjectNotValidException | IllegalAnnotationException e1) {
             e1.printStackTrace();
         }
-        encoding = new ASPInputProgram();
+
+        // Aggiungo il path al file contenente le regole logiche
+        encoding = new InputProgram();
         encoding.addFilesPath(encodingResource);
 
+        // Inizializzo il frame per la grafica
         JFrame f = new JFrame();
         f.setTitle("Falling Puzzles AI");
         f.setSize(GameLoop.WIDTH, GameLoop.HEIGHT);
 
-        gp.addKeyListener(new MovementController(gp));
-        gp.addMouseListener(new MouseController(gp));
+        //gp.addKeyListener(new MovementController(gp));
+        //gp.addMouseListener(new MouseController(gp));
         gp.setFocusable(true);
 
         f.add(gp);
@@ -63,92 +70,93 @@ public class GameLoop implements Runnable{
 
     private void addFacts() {
         InputProgram facts = new ASPInputProgram();
+        String Facts = "";
 
-       // try {
-            //FileWriter myWriter = new FileWriter("lib/debug/filename" + iterations + ".txt");
-
-            // Passo tutte le moves possibili come fatti
+        try {
+            // Prendo tutte le moves possibili come fatti
             for (Move v : this.gp.getGrid().getAllPossibleMove()) {
-                try {
-                    //System.out.println(v);
-                    facts.addObjectInput(v);
-                   // myWriter.write(v.toFact());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                facts.addObjectInput(v);
+                Facts += v.toFact();
             }
-            //myWriter.write("\n");
+            // Prendo tutte le tile piene
             for (Tile t : this.gp.getGrid().getTiles()) {
-                try {
-                    facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
-                    //myWriter.write(t.toFact());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
+                TileWrapper T = new TileWrapper(t.getX(),t.getY(),t.getType());
+                Facts += T.toFact();
+            }
+            // Prendo tutte le tile vuote
+            for (TileWrapper t : this.gp.getGrid().getEmptyTiles()) {
+                facts.addObjectInput(t);
+                Facts += t.toFact();
             }
 
-            for (Tile t : this.gp.getGrid().getEmptyTiles()) {
-                try {
-                    facts.addObjectInput(new TileWrapper(t.getX(), t.getY(), t.getType()));
-                   // myWriter.write(t.toFact());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            handler.addProgram(facts);
-            /*myWriter.write("\n");
-            myWriter.write(encoding.getPrograms());
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
+
+        // Aggiungo all'handler tutti i fatti raccolti
+        handler.addProgram(facts);
+
+        //System.out.println(Facts);
     }
 
     @Override
     public void run() {
         Game.getInstance().setGp(gp);
         Game.getInstance().newRow();
-        while(true) {
 
+        while(true) {
+            // Genero una nuova riga dal basso ed attivo la gravità
             Game.getInstance().newRow();
 
-            handler.removeAll();
-            addFacts();
-            handler.addProgram(encoding);
-            Output o =  handler.startSync();
-            AnswerSets answersets = (AnswerSets) o;
-            boolean moved= false;
-            //for(AnswerSet AS: answersets.getOptimalAnswerSets()){
-            for(AnswerSet AS: answersets.getAnswersets()){
+            // Controllo che non abbia raggiunto il limite sopre e in caso resetto
+            if(Game.getInstance().isDead()) {
+                // Se il gioco è finito resetto tutto e ricomincio
+                Game.getInstance().reset();
+                System.out.println("DEAD! Resetting game.");
+                continue;
+            }
 
-                    System.out.println("ANS:");
+
+                // Pulisco l'handler
+            handler.removeAll();
+
+            //Aggiungo tutti i fatti della matrice (tile e mosse possibili)
+            addFacts();
+
+            // Aggiungo il programma logico
+            handler.addProgram(encoding);
+
+            // Eseguo in maniera sincronizzata in modo tale da aspettare il risultato
+            Output o =  handler.startSync();
+
+            // Mi prendo tutti gli AnswerSets
+            AnswerSets answersets = (AnswerSets) o;
+
+            // Scorro tutti gli answer set ottimali
+            for(AnswerSet AS: answersets.getOptimalAnswerSets()){
+                //System.out.println("ANS:");
                 try {
                     for (Object obj : AS.getAtoms()) {
                         //System.out.println("Obj :" + obj);
-                        //if(obj instanceof Move  || obj instanceof DoMove) { System.out.println(obj); }
+                        //if(obj instanceof LiberaSopra || obj instanceof TappaBuco) {System.out.print(obj.toString());}
+                        //System.out.print(obj.toString());
 
                         if(obj instanceof DoMove) {
+                            // Se trovo una mossa nell'answer set allora è la mossa da fare
                             DoMove m = (DoMove) obj;
-                            System.out.println(m);
+                            // Eseguo la mossa
                             Game.getInstance().doMove(m);
-                            moved = true;
-                            break;
                         }
                     }
+                    System.out.println("");
+                    System.out.println("");
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                if(moved) { break; }
             }
-            iterations ++;
-            //Game.getInstance().printMatrix();
-            if(Game.getInstance().isDead()){
-                Game.getInstance().reset();
-                iterations = 0;
-                System.out.println("DEAD! Resetting game.");
-            }
+
+            // Faccio bloccare il thread fra una mossa e la successiva
             try {
                 Thread.sleep(frequency);
             } catch (InterruptedException e) {

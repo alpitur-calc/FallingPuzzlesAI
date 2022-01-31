@@ -9,27 +9,28 @@ freeSpaceFT(X1,X2,Y,Y+1) :- freeSpaceFT(X1,X2,Y,Y), freeSpaceFT(X1,X2,Y+1,Y+1).
 
 tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne) :- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1, Y2), TO-FROM +1 >= T, DX==FROM-X, Colonne = Y2-Y+1, SpaziVuoti = TO - FROM + 1 - T. %prendere FT con Y2 max
 tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne) :- move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1, Y2),  TO-FROM +1 >= T, SX==X-FROM, Colonne = Y2-Y+1, SpaziVuoti = TO - FROM + 1 - T. %prendere FT con Y2 max
-:~ tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne), dontMove(X,Y,T,DX,SX), Costo = 5, Cols = #count{Colonne : tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne)}. [Costo@1]
+:~ #count{X,Y,T,DX,SX : tappaBuco(X,Y,T,DX,SX,_,_), dontMove(X,Y,T,DX,SX)}= Costo, Cols = #count{Colonne : tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne)}. [Costo+ Cols@2]
+:~ #sum{SpaziVuoti: tappaBuco(X,Y,T,DX,SX,SpaziVuoti, Colonne), dontMove(X,Y,T,DX,SX)} = Rows. [Rows@2]
 %il count dovrebbe contare quanti tappabuchi si sono generati con numeri diversi di colonne, più ce ne sono, più spazi liberi ci sono sotto
 
-liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
-liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
-:~ liberaSopra(X,Y,T,DX,SX), dontMove(X,Y,T,DX,SX), Costo = 3. [Costo@1]
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), freeSpaceFT(X1U,X1D-1,Y,Y2), X1D>=X1U, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), freeSpaceFT(X2D+1,X2U,Y,Y2), X2D<=X2U, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), TU=1,tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), X1D=X1U, TD>=TU, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), X2D=X2U, TD>=TU, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X1D + DX) > X2U.  %dx
 
 
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), freeSpaceFT(X1U,X1D-1,Y,Y2), X1D>=X1U, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), freeSpaceFT(X2D+1,X2U,Y,Y2), X2D<=X2U, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), TU=1,tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), X1D=X1U, TD>=TU, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
+liberaSopra(X1D,Y,TD,DX,SX) :- move(X1D,Y,TD,DX,SX), X2D=X2U, TD>=TU, tile(X1U, Y-1, TU), TU != 0, X2D= X1D + TD - 1, X2U= X1U + TU - 1, X2D >= X1U, X1D <= X2U, (X2D - SX) < X1U.  %sx
+
+:~ #count{X,Y,T,DX,SX : liberaSopra(X,Y,T,DX,SX), dontMove(X,Y,T,DX,SX)} = Costo. [Costo@1]
+
+%:~ #count{X,Y,T,DX,SX: liberaSopra(X,Y,T,DX,SX)} = CA, #count{X2,Y2,T2,DX2,SX2: tappaBuco(X2,Y2,T2,DX2,SX2,_,_)} = CB,CA + CB == 0  , doMove(X,Y,T,DX,SX), Costo = 100. [Costo@1]
 :- #count{X,Y,T,D,S: doMove(X,Y,T,S,D)} != 1. %devesserci esattamente una mossa.
 :- doMove(X,Y,0,D,S). %non puoi muovere tile vuote.
 :- doMove(X,Y,T,0,0). %non puoi muovere di 0 spazi.
 :- doMove(X,Y,T,D,S), S<>0, D<>0. %non puoi muovere sia a sinistra che a destra.
-:- domove(X,Y,T,D,S), tile(X1,Y,T1,D,S), X+T-1+D >= X1.
-:- domove(X,Y,T,D,S), tile(X1,Y,T1,D,S), X-D < X1 + T1.
-
-%freeSpaceFT(X,X,Y):- freeSpace(X,Y).
-%freeSpaceFT(FROM, TO+1, Y) :- freeSpaceFT(FROM, TO, Y), freeSpace(TO+1, Y).
-%:~ dontMove(X,Y,T,DX,SX),  freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 >= T, DX==FROM-X. [2+(10-Y)@1]
-%:~ dontMove(X,Y,T,DX,SX),  freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 > T, DX==FROM-X. [1@1]
-%:~ dontMove(X,Y,T,DX,SX), move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 >= T, SX==X-FROM. [2+(10-Y)@1]
-%:~ dontMove(X,Y,T,DX,SX), move(X,Y,T,DX,SX), freeSpaceFT(FROM,TO,Y+1), TO-FROM +1 > T, SX==X-FROM. [1@1]
-
-%tallest(X1,X2,Y1,I) :- #max{Y2 : freeSpaceFT(X1,X2,Y1,Y2)} = I, freeSpaceFT(X1,X2,Y1,Y2).
-%largest(X1,I,Y1,Y2) :- #max{X2 : freeSpaceFT(X1,X2,Y1,Y2)} = I, freeSpaceFT(X1,X2,Y1,Y2).
+:~ doMove(A,B,C,D,E). [1@1]  % questo weak serve per assegnare un costo fittizio a ogni do move

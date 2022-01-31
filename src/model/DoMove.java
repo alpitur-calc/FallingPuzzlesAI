@@ -69,12 +69,15 @@ public class DoMove {
 
     @Override
     public String toString() {
-        return "DoMove{" +
+        /*return "DoMove{" +
                 "x=" + x +
                 ", y=" + y +
                 ", lenght=" + lenght +
                 ", moveDx=" + moveDx +
                 ", moveSx=" + moveSx +
-                '}';
+                '}';*/
+
+        return "DoMove(" + x + "," + y + "," + lenght + "," + moveDx +","+ moveSx +").";
+
     }
 }

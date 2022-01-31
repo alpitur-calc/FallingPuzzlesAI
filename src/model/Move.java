@@ -70,13 +70,14 @@ public class Move {
 
     @Override
     public String toString() {
-        return "Move{" +
+        /*return "Move{" +
                 "x=" + x +
                 ", y=" + y +
                 ", lenght=" + lenght +
                 ", moveDx=" + moveDx +
                 ", moveSx=" + moveSx +
-                '}';
+                '}';*/
+        return "move(" + x + "," + y + "," + lenght + "," + moveDx + "," + moveSx + ").";
     }
 
     public String toFact(){

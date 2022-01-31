@@ -15,8 +15,8 @@ public class TileWrapper {
     public TileWrapper(){}
 
     public TileWrapper(int x, int y, int type) {
-        this.x = y;
-        this.y = x;
+        this.x = x;
+        this.y = y;
         this.type = type;
     }
 
@@ -46,11 +46,12 @@ public class TileWrapper {
 
     @Override
     public String toString() {
-        return "TileWrapper{" +
+        /*return "TileWrapper{" +
                 "x=" + x +
                 ", y=" + y +
                 ", type=" + type +
-                '}';
+                '}';*/
+        return "tile(" + x + "," + y + "," + type + ").";
     }
 
     public String toFact(){
