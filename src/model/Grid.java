@@ -57,7 +57,7 @@ public class Grid {
         while(lenght < maxLenght){// && ntiles < 4){
             int type= 0, y= 9, x= r.nextInt(8);
             boolean special = false;
-            if(r.nextInt(100) % 15 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
+            //if(r.nextInt(100) % 15 == 0 && nspecial == 0){ special = true; } //possibilità di 1 su 10 di essere speciale
             int rand = r.nextInt(100);
             if(rand >=0 && rand < 25){ type = 1; }
             if(rand >=25 && rand < 75){ type = 2; }
